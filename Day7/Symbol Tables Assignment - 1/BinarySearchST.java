@@ -10,7 +10,7 @@ class BinarySearchST<Key extends Comparable<Key>,Value> {
             return;
         }
         if(n == keys.length) resize();
-        for(int j = n; j > i; j++) {
+        for(int j = n; j > i; j--) {
             keys[j] = keys[j-1];
             values[j] = values[j-1];
         }
@@ -39,9 +39,10 @@ class BinarySearchST<Key extends Comparable<Key>,Value> {
         return null;
     }
     public int rank(Key key) {
+        if(isEmpty()) return 0;
         int lo = 0;
         int hi = n-1;
-        while(hi <= lo) {
+        while(lo <= hi) {
             int mid = lo + (hi - lo)/2;
             int comp = key.compareTo(keys[mid]);
             if(comp < 0) hi = mid - 1;
@@ -51,9 +52,41 @@ class BinarySearchST<Key extends Comparable<Key>,Value> {
         return lo;
     }
     public Key max() {
+        if(isEmpty()) return null;
         return keys[n-1];
     }
     public Key floor(Key key) {
-
+        int i = rank(key);
+        if(isEmpty()) return null;
+        if(i < n && keys[i].compareTo(key) == 0) {
+            return keys[i];
+        } else {
+            return keys[i - 1];
+        }
     }
+    public void deleteMin() {
+        if(isEmpty()) return;
+        for(int i = 0; i< n-1; i++) {
+            keys[i] = keys[i+1];
+            values[i] = values[i+1];
+        }
+        n--;
+    }
+    public Iterable<Key> keys() {
+        Queue<Key> queue = new Queue<Key>();
+        for(int i = 0; i < n; i++) {
+            queue.Enqueue(keys[i]);
+        }
+        return queue;
+    }
+    public boolean isEmpty() {
+        return n == 0;
+    }
+    // public String toString() {
+    //     String res = "";
+    //     for(int i = 0; i < n; i++){
+    //         res += keys[i] + " ";
+    //     }
+    //     return res;
+    // }
 }
