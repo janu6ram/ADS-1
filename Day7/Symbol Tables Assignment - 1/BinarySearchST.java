@@ -82,11 +82,12 @@ class BinarySearchST<Key extends Comparable<Key>,Value> {
     public boolean isEmpty() {
         return n == 0;
     }
-    // public String toString() {
-    //     String res = "";
-    //     for(int i = 0; i < n; i++){
-    //         res += keys[i] + " ";
-    //     }
-    //     return res;
-    // }
+    public String toString() {
+        String res = "";
+        for(int i = 0; i < n; i++){
+            res += keys[i].toString() + " ";
+        }
+        return res;
+    }
+
 }

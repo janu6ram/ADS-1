@@ -43,6 +43,7 @@ public void testCase1() {
   for(String s: arr){
   	res += s + " ";
   }
+  System.out.println(symbolTable.toString());
   Assert.assertEquals(res, symbolTable.keys().toString());
 }
 
