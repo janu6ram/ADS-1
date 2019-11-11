@@ -77,6 +77,44 @@ public class BST<Key extends Comparable<Key>, Value> {
         x.size = 1 + size(x.leftLink) + size(x.rightLink);
         return x;
     }
+    public Node delete(Key key) {
+        if(key == null) return null;
+        root = delete(root, key);
+    }
+    private Node delete(Node x, Key key) {
+        if(x == null) return null;
+        int comp = key.compareTo(key);
+        if(comp < 0) x.leftLink = delete(x.leftLink, key);
+        else if(comp > 0) x.rightLink = delete(x.rightLink, key);
+        else {
+            if(x.leftLink == null) return x.rightLink;
+            if(x.rightLink == null) return x.leftLink;
+            Node t = x;
+            x = min(t.rightLink);
+            x.rightLink = deleteMin(t.rightLink);
+            x.leftLink = t.leftLink;
+        }
+        x.size = 1 + size(x.leftLink) + size(x.rightLink);
+        return x;
+    }
+    public Key min() {
+        return min(root).key;
+    }
+    private Node min(Node x) {
+        if(x.leftLink == null) return x;
+        else return min(x.leftLink);
+    }
+    public Key max() {
+        return max(root).key;
+    }
+    private Node max(Node x) {
+        if(x.rightLink == null) return x;
+        else return max(x.rightLink);
+    }
+    public Key floor(Key key) {
+
+    }
+
 
 
 }
