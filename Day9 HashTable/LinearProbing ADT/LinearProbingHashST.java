@@ -42,8 +42,9 @@ public class LinearProbingHashST<Key,Value> {
         if(value == null) {
             delete(key);
         }
-        if(n >= m/2) resize(2*m);
+        if(n == m/2) resize(2*m);
         int i;
+        System.out.println(hash(key));
         for(i = hash(key); keys[i] != null; i = (i+1)% m) {
             if(keys[i].equals(key)) {
                 values[i] = value;
@@ -52,6 +53,7 @@ public class LinearProbingHashST<Key,Value> {
         }
         keys[i] = key;
         values[i] = value;
+        n++;
     }
 
     /**
@@ -59,13 +61,14 @@ public class LinearProbingHashST<Key,Value> {
      */
     private void resize(int capacity) {
         LinearProbingHashST<Key, Value> temp = new LinearProbingHashST<Key, Value>(capacity);
-        for(int i = 0; i < n; i++) {
+        for(int i = 0; i < m; i++) {
             if(keys[i] != null) {
-                put(keys[i], values[i]);
+                temp.put(keys[i], values[i]);
             }
         }
         keys = temp.keys;
         values = temp.values;
+        m = temp.m;
     }
 
     // hash function for keys - returns value between 0 and M-1.
@@ -90,11 +93,11 @@ public class LinearProbingHashST<Key,Value> {
                 break;
             }
         }
-        for(int k = i; keys[k] != null;i = (i + 1) % m) {
-            Key keyToRehash = keys[i];
-            Value valueToRehash = values[i];
-            keys[i] = null;
-            values[i] = null;
+        for(int k = i; keys[k] != null;k = (k + 1) % m) {
+            Key keyToRehash = keys[k];
+            Value valueToRehash = values[k];
+            keys[k] = null;
+            values[k] = null;
             n--;
             put(keyToRehash, valueToRehash);
         }
@@ -102,9 +105,13 @@ public class LinearProbingHashST<Key,Value> {
         if(n> 0 && n <= m/8) resize(m/2);
     }
     public void display() {
+        System.out.println(n);
         System.out.println("Hash table contains key-value pairs: {");
-        for(int i = 0; i < n; i++) {
-            System.out.println("(" + keys[i].toString() +" "+ values[i].toString() + ")");
+        for(int i = 0; i < m; i++) {
+            if(keys[i] != null) {
+                System.out.println("(" + keys[i].toString() +" "+ values[i].toString() + ")");
+            }
+
         }
         System.out.print(" }");
 
