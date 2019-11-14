@@ -1,36 +1,57 @@
-public class ArrayBST {
+import java.util.Arrays;
 
-    public void put(Key key, Value value) {
-        if (key == null || value == null) throw new IllegalArgumentException();
-        if (size() == keys.length) {
-            System.out.println("Size Limit Reached.");
-            return;
-        }
-        put(0, key, value);
+public class ArrayBST<Key extends Comparable<Key>, Value> {
+    private Key[] keys;
+    private Value[] values;
+    private int[] size;
+    private int n;
+    public ArrayBST() {
+        keys = (Key[]) new Comparable[30];
+        values = (Value[]) new Object[30];
+        int n = 0;
+        size = new int[20];
     }
-
-    private int put(int index, Key key, Value value) {
-        if (index == -1 || keys[index] == null) {
-            int nextElementIndex = size();
-
-            keys[nextElementIndex] = key;
-            values[nextElementIndex] = value;
-            size[nextElementIndex] = 1;
-
-            return nextElementIndex;
+    public void put(Key key, Value value) {
+        if(key == null) return;
+        if(value == null) return;
+        int i = 1;
+        while(keys[i] != null) {
+            int comp = key.compareTo(keys[i]);
+            if(comp > 0) {
+                i = (2 * i + 1);
+            } else if(comp < 0) {
+                i = 2 * i;
+            } else {
+                values[i] = value;
+                return;
+            }
         }
-
-        int compare = key.compareTo(keys[index]);
-
-        if (compare < 0) {
-            leftLinks[index] = put(leftLinks[index], key, value);
-        } else if (compare > 0) {
-            rightLinks[index] = put(rightLinks[index], key, value);
-        } else {
-            values[index] = value;
+        keys[i] = key;
+        values[i] = value;
+        n++;
+    }
+    public int size(int i) {
+        int left = 0;
+        int right = 0;
+        if(keys[2*i +1] != null) right = 1;
+        if(keys[2*i] != null) left = 1;
+        size[i] = left * (size[2*i]) + right * (size[2*i + 1]) + 1;
+        return size[i];
+    }
+    private void sizeArray() {
+        for(int i = 1; i < n; i++) {
+            size[i] = size(i);
         }
-
-        size[index] = size(leftLinks[index]) + 1 + size(rightLinks[index]);
-        return index;
+    }
+    public Value get(Key key) {
+        // System.out.println(Arrays.toString(keys));
+        // System.out.println(Arrays.toString(values));
+        for(int i = 1; i <= keys.length; i++) {
+            if(keys[i] == null) continue;
+            if(key.compareTo(keys[i]) == 0) {
+                return values[i];
+            }
+        }
+        return null;
     }
 }

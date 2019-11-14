@@ -77,13 +77,13 @@ public class BST<Key extends Comparable<Key>, Value> {
         x.size = 1 + size(x.leftLink) + size(x.rightLink);
         return x;
     }
-    public Node delete(Key key) {
-        if(key == null) return null;
+    public void delete(Key key) {
+        if(key == null) return;
         root = delete(root, key);
     }
     private Node delete(Node x, Key key) {
         if(x == null) return null;
-        int comp = key.compareTo(key);
+        int comp = key.compareTo(x.key);
         if(comp < 0) x.leftLink = delete(x.leftLink, key);
         else if(comp > 0) x.rightLink = delete(x.rightLink, key);
         else {
@@ -112,8 +112,46 @@ public class BST<Key extends Comparable<Key>, Value> {
         else return max(x.rightLink);
     }
     public Key floor(Key key) {
-
+        if(key == null) return null;
+        Node temp = floor(root, key);
+        if(temp == null) return null;
+        else return temp.key;
     }
+    private Node floor(Node x, Key key) {
+        if(x == null) return null;
+        int comp = key.compareTo(x.key);
+        if(comp == 0) return x;
+        if(comp < 0) return floor(x.leftLink, key);
+        Node t = floor(x.rightLink, key);
+        if(t != null) return t;
+        else return x;
+    }
+    public Key ceiling(Key key) {
+        Node temp = ceiling(root, key);
+        return temp.key;
+    }
+    private Node ceiling(Node x, Key key) {
+        if(x == null) return null;
+        int comp = key.compareTo(x.key);
+        if(comp == 0) return x;
+        if(comp > 0) return ceiling(x.rightLink, key);
+        Node t = ceiling(x.leftLink, key);
+        if(t != null) return t;
+        return x;
+    }
+    public Key select(int k) {
+        if(k < 0 && k >= size()) return null;
+        Node temp = select(root, k);
+        return temp.key;
+    }
+    private Node select(Node x, int k) {
+        if(x == null) return null;
+        int t = size(x.leftLink);
+        if(k < t) return select(x.leftLink, k);
+        else if(k > t) return select(x.rightLink, k-t-1);
+        else return x;
+    }
+
 
 
 

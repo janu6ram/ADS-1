@@ -1,11 +1,11 @@
 /**
  * This is JUnit that tests the lower method in StringHandling class.
  * This contains 1 testcases.
- * 
+ *
  * Please don"t run this file.
- * You can add your own test cases to this file by just copy and 
+ * You can add your own test cases to this file by just copy and
  * paste the last three lines of the code (TestCase1).
- * 
+ *
  * @author Deepak Kumar
  */
 
@@ -87,4 +87,3 @@ public class TestJUnit {
 
 
 }
-
