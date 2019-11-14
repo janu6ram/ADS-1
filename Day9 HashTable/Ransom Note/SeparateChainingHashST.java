@@ -2,11 +2,11 @@ public class SeparateChainingHashST<Key, Value> {
     private Node [] st;
     private int n;
     private int m;
-    private class Node {
-        private Key key;
-        private Value value;
+    private static class Node {
+        private Object key;
+        private Object value;
         private Node next;
-        public Node(Key key, Value value, Node next) {
+        public Node(Object key, Object value, Node next) {
             this.key = key;
             this.value = value;
             this.next = next;
@@ -15,16 +15,20 @@ public class SeparateChainingHashST<Key, Value> {
     public SeparateChainingHashST(int capacity) {
         n = 0;
         m = capacity;
-        st = (Node[]) new Object[m];
+        st = new Node[m];
     }
     public void put(Key key, Value value) {
         if(value == null) {
             delete(key);
             return;
         }
-        if(n == m-2) resize(2*m);
         int i = hash(key);
-        Node x;
+        if(st[i] == null) {
+            Node node = new Node(key, value, null);
+            st[i] = node;
+            n++;
+        }
+        Node x = st[i];
         for(x = st[i]; x.next != null; x = x.next) {
             if(key.equals(x.key)) {
                 x.value = value;
@@ -38,21 +42,12 @@ public class SeparateChainingHashST<Key, Value> {
     public int hash(Key key) {
         return (key.hashCode() & 0x7fffffff) % m;
     }
-    public void resize(int size) {
-        SeparateChainingHashST<Key,Value> temp = new SeparateChainingHashST<Key,Value>(size);
-        for(int i = 0; i < m; i++) {
-            for(Node x = st[i]; x != null; x = x.next) {
-                temp.put(x.key,x.value);
-            }
-        }
-        st = temp.st.clone();
-        m = temp.m;
-    }
+
     public Value get(Key key) {
         if(key == null) return null;
         int i = hash(key);
         for(Node x = st[i]; x != null; x = x.next) {
-            if(key.equals(x.key)) return x.value;
+            if(key.equals(x.key)) return (Value) x.value;
         }
         return null;
     }
